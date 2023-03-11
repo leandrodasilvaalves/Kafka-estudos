@@ -10,23 +10,25 @@ namespace Contracts
     {
         public static void Main(string[] args)
         {
-            var generator = new OrderGenerator();
-            var order = generator.Generate();
+            var generator = new Generator();
+            var order = generator.GenerateOrder();
             Console.WriteLine(JsonSerializer.Serialize(order, new JsonSerializerOptions { WriteIndented = true }));
         }
     }
 
-    public interface IOrderGenerator
+    public interface IGenerator
     {
-        Order Generate();
+        Order GenerateOrder();
+        Customer GenerateCustomer();
+        Product GenerateProduct();
     }
 
-    public class OrderGenerator : IOrderGenerator
+    public class Generator : IGenerator
     {
         private readonly Faker _faker;
         private readonly IFixture _fixture;
 
-        public OrderGenerator()
+        public Generator()
         {
             _faker = new Faker("pt_BR");
             _fixture = new Fixture();
@@ -68,6 +70,10 @@ namespace Contracts
             });
         }
 
-        public Order Generate() => _fixture.Create<Order>();
+        public Order GenerateOrder() => _fixture.Create<Order>();
+
+        public Customer GenerateCustomer() => _fixture.Create<Customer>();
+
+        public Product GenerateProduct() => _fixture.Create<Product>();
     }
 }

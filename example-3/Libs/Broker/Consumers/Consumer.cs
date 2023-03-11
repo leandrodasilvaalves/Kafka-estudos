@@ -1,38 +1,58 @@
 using Confluent.Kafka;
+using Microsoft.Extensions.Hosting;
 
 namespace Broker.Consumers
 {
-
-    public class Consumer : IConsumer
+    public interface IConsumer<TMessage>  where TMessage : class
     {
-        private readonly IConsumer<Null, string> _consumer;
+        Task ConsumeAsync(TMessage message, CancellationToken stoppingToken);
+    }
 
-        public Consumer(IConsumer<Null, string> consumer)
+    public abstract class Consumer<TMessage> : BackgroundService, IConsumer<TMessage> where TMessage : class
+    {
+        private readonly string _topicName;
+        private readonly string TName = typeof(TMessage).Name;
+        private readonly IConsumer<Null, TMessage> _consumer;
+
+        public Consumer(IConsumer<Null, TMessage> consumer, string topicName)
         {
             _consumer = consumer;
+            _topicName = topicName;
         }
 
-        public async Task ConsumeAsync(string topicName, CancellationToken cancellationToken)
+        public abstract Task ConsumeAsync(TMessage message, CancellationToken stoppingToken);
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            System.Console.WriteLine("Inicializando consumer...");
-            try
+            await Task.Run(async () =>
             {
-                _consumer.Subscribe(topicName);
-                while (!cancellationToken.IsCancellationRequested)
+                Console.WriteLine($"Inicializando consumer...[{_topicName}]");
+                try
                 {
-                    var cResult = _consumer.Consume(cancellationToken);
-                    Console.WriteLine($"Consumed event: [topic] : {topicName} | [partition] : {cResult.Partition.Value} | [key] : {cResult.Message.Key,-10} | [value] : {cResult.Message.Value}");
-                    await Task.CompletedTask;
+                    _consumer.Subscribe(_topicName);
+                    while (!stoppingToken.IsCancellationRequested)
+                    {
+                        var result = _consumer.Consume(stoppingToken);
+                        if(result is null)
+                            continue;
+
+
+                        Console.WriteLine($"Consumed event: [topic] : {_topicName} | [partition] : {result.Partition.Value} | [key] : {result.Message.Key,-10}");
+                        await ConsumeAsync(result.Message.Value, stoppingToken);
+                        _consumer.Commit();
+                    }
                 }
-            }
-            catch (OperationCanceledException)
-            {
-                System.Console.WriteLine("Encerrando consumer");
-            }
-            finally
-            {
-                _consumer.Close();
-            }
+                catch (OperationCanceledException)
+                {
+                    Console.WriteLine($"Encerrando consumer...[{_topicName}]");
+                }
+                finally
+                {
+                    _consumer.Close();
+                    _consumer.Dispose();
+                }
+                return Task.CompletedTask;
+            });
         }
     }
 }

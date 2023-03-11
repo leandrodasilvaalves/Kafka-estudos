@@ -6,7 +6,7 @@ namespace Contracts.Extensions
     {
         public static void AddOrderGenerator(this IServiceCollection self)
         {
-            self.AddSingleton<IOrderGenerator, OrderGenerator>();
+            self.AddSingleton<IGenerator, Generator>();
         }
     }
 }

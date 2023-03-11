@@ -1,22 +1,13 @@
-﻿
-using Broker.Consumers;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Broker.Consumers;
+using Contracts.Models;
+using Emails.Consumers;
 
-IConfiguration config = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json")
-    .Build();
+var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.json");
 
-var serviceProvider = new ServiceCollection()
-            .AddConsumer(config, "Consumer")
-            .BuildServiceProvider();
+builder.Services.AddConsumer<OrderConsumer, Order>(builder.Configuration, "Consumers");
+builder.Services.AddConsumer<CustomerConsumer, Customer>(builder.Configuration, "Consumers");
+builder.Services.AddConsumer<ProductConsumer, Product>(builder.Configuration, "Consumers");
 
-var cts = new CancellationTokenSource();
-Console.CancelKeyPress += (_, e) =>
-{
-    e.Cancel = true;
-    cts.Cancel();
-};
-
-var consumer = serviceProvider.GetService<IConsumer>();
-await consumer.ConsumeAsync("orders", cts.Token);
+var app = builder.Build();
+app.Run();
