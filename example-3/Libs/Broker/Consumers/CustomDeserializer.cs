@@ -6,7 +6,7 @@ namespace Broker.Consumers
 {
     public class CustomDeserializer<TObject> : IDeserializer<TObject> where TObject : class
     {
-        private static CustomDeserializer<TObject> _instance;
+        private static IDeserializer<TObject> _instance;
 
         public TObject Deserialize(ReadOnlySpan<byte> data, bool isNull, SerializationContext context)
         {
@@ -14,7 +14,7 @@ namespace Broker.Consumers
             return JsonSerializer.Deserialize<TObject>(value);
         }
 
-        public static CustomDeserializer<TObject> Instance()
+        public static IDeserializer<TObject> Instance()
         {
             if(_instance is null)
             {

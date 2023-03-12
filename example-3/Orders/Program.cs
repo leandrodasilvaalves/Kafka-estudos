@@ -10,6 +10,7 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Services
     .ConfigureProducers(builder.Configuration)
+    .AddProducer<Producer<Order>, Order>()
     .AddProducer();
 
 builder.Services
