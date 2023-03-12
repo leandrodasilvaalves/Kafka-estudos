@@ -2,16 +2,16 @@ using Broker.Consumers;
 using Contracts.Extensions;
 using Contracts.Models;
 
-namespace Emails.Consumers
+namespace Logs.Consumers
 {
     public class OrderConsumer : Consumer<Order>
     {
-        public OrderConsumer(IServiceProvider provider) 
-            : base(provider, "orders"){}
+        public OrderConsumer(IServiceProvider provider)
+        : base(provider, "orders") { }
 
         public override Task ConsumeAsync(Order message, CancellationToken stoppingToken)
         {
-            ConsoleHelper.WriteLine("[Email -> Order]: {0}", message.ToString(), ConsoleColor.Cyan);
+            ConsoleHelper.WriteLine("[Info -> order]: {0}", message.Id, ConsoleColor.DarkGreen);
             return Task.CompletedTask;
         }
     }

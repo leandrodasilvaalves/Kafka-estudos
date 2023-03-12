@@ -1,9 +1,10 @@
 using Confluent.Kafka;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Broker.Consumers
 {
-    public interface IConsumer<TMessage>  where TMessage : class
+    public interface IConsumer<TMessage> where TMessage : class
     {
         Task ConsumeAsync(TMessage message, CancellationToken stoppingToken);
     }
@@ -14,9 +15,9 @@ namespace Broker.Consumers
         private readonly string TName = typeof(TMessage).Name;
         private readonly IConsumer<Null, TMessage> _consumer;
 
-        public Consumer(IConsumer<Null, TMessage> consumer, string topicName)
+        public Consumer(IServiceProvider provider, string topicName)
         {
-            _consumer = consumer;
+            _consumer = provider.GetService<IConsumer<Null, TMessage>>();
             _topicName = topicName;
         }
 
@@ -33,11 +34,10 @@ namespace Broker.Consumers
                     while (!stoppingToken.IsCancellationRequested)
                     {
                         var result = _consumer.Consume(stoppingToken);
-                        if(result is null)
+                        if (result is null)
                             continue;
 
 
-                        Console.WriteLine($"Consumed event: [topic] : {_topicName} | [partition] : {result.Partition.Value} | [key] : {result.Message.Key,-10}");
                         await ConsumeAsync(result.Message.Value, stoppingToken);
                         _consumer.Commit();
                     }
