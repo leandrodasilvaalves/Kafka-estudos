@@ -15,7 +15,7 @@ namespace Payments.Consumers
 
         public override Task ConsumeAsync(Order message, CancellationToken stoppingToken)
         {
-            ConsoleHelper.WriteLine("[Payment -> Order]: {0}", message.Id, ConsoleColor.DarkYellow);
+            ConsoleHelper.WriteLine("[Payment -> Order received]: {0}", message.Id, ConsoleColor.DarkYellow);
             var approved = message.Total % 2 == 0;
             var payment = new Payment(message, approved);
             return _producer.ProduceAsync("payments", payment);
