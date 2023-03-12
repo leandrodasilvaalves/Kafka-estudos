@@ -11,7 +11,7 @@ namespace Emails.Consumers
 
         public override Task ConsumeAsync(Order message, CancellationToken stoppingToken)
         {
-            ConsoleHelper.WriteLine("[Email -> Order]: {0}", message.ToString(), ConsoleColor.Cyan);
+            ConsoleHelper.WriteLine("[Email -> Order]: {0}", message.Id, ConsoleColor.Cyan);
             return Task.CompletedTask;
         }
     }

@@ -11,7 +11,7 @@ namespace Logs.Consumers
 
         public override Task ConsumeAsync(Order message, CancellationToken stoppingToken)
         {
-            ConsoleHelper.WriteLine("[Info -> order]: {0}", message.Id, ConsoleColor.DarkGreen);
+            ConsoleHelper.WriteLine("[Info -> order]: {0}", message, ConsoleColor.DarkGreen);
             return Task.CompletedTask;
         }
     }
