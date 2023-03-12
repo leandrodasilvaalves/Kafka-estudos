@@ -8,8 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json");
 builder.Configuration.AddEnvironmentVariables();
 
-builder.Services.AddProducer(builder.Configuration);
-builder.Services.AddConsumer<PaymentsConsumer, Payment>(builder.Configuration, "Consumers");
+builder.Services
+    .ConfigureProducers(builder.Configuration)
+    .AddProducer();
+
+builder.Services
+    .ConfigureConsumers(builder.Configuration, "Consumers")
+    .AddConsumer<PaymentsConsumer, Payment>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

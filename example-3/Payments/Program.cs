@@ -7,8 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 builder.Configuration.AddEnvironmentVariables();
 
-builder.Services.AddProducer(builder.Configuration, "Producers");
-builder.Services.AddConsumer<OrderConsumer, Order>(builder.Configuration, "Consumers");
+builder.Services
+    .ConfigureProducers(builder.Configuration, "Producers")
+    .AddProducer();
+
+
+builder.Services
+    .ConfigureConsumers(builder.Configuration, "Consumers")
+    .AddConsumer<OrderConsumer, Order>();
 
 var app = builder.Build();
 app.Run();
