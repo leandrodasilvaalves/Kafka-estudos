@@ -6,10 +6,13 @@ namespace Broker.Producers;
 
 public static class ProducerExtensions
 {
+    private static ProducerConfig ProducerConfig;
     public static IServiceCollection AddProducer(this IServiceCollection self, IConfiguration config, string sectionName = "Kafka")
     {
-        var pConfig = config.GetSection(sectionName).Get<ProducerConfig>();
-        self.AddSingleton<IProducer<Null, string>>(new ProducerBuilder<Null, string>(pConfig).Build());
+        ProducerConfig ??= config.GetSection(sectionName).Get<ProducerConfig>();
+        ProducerConfig.SecurityProtocol = SecurityProtocol.Plaintext;
+
+        self.AddSingleton<IProducer<Null, string>>(new ProducerBuilder<Null, string>(ProducerConfig).Build());
         self.AddSingleton<IProducer, Producer>();
         return self;
     }

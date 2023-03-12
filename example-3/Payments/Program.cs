@@ -5,6 +5,8 @@ using Payments.Consumers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddEnvironmentVariables();
+
 builder.Services.AddProducer(builder.Configuration, "Producers");
 builder.Services.AddConsumer<OrderConsumer, Order>(builder.Configuration, "Consumers");
 
