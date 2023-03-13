@@ -6,23 +6,23 @@ ENV ASPNETCORE_URLS=http://+:80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ./Emails/Emails.csproj ./Emails/
+COPY ./Services/Orders/Orders.csproj ./Services/Orders/
 COPY ./Libs/Broker/Broker.csproj ./Libs/Broker/
 COPY ./Libs/Contracts/Contracts.csproj ./Libs/Contracts/
 
-RUN dotnet restore ./Emails/Emails.csproj
+RUN dotnet restore ./Services/Orders/Orders.csproj
 
-COPY ./Emails/ ./Emails/
+COPY ./Services/Orders/ ./Services/Orders/
 COPY ./Libs/Broker/ ./Libs/Broker/
 COPY ./Libs/Contracts/ ./Libs/Contracts/
 
-WORKDIR ./Emails
-RUN dotnet build Emails.csproj -c Release -o /app/build
+WORKDIR ./Services/Orders
+RUN dotnet build Orders.csproj -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish Emails.csproj -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish Orders.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Emails.dll"]
+ENTRYPOINT ["dotnet", "Orders.dll"]

@@ -63,7 +63,7 @@ services:
     container_name: ${PROJECT_NAME}.payments
     build:
       context: .
-      dockerfile: Payments/Dockerfile
+      dockerfile: Services/Payments/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - Consumers__BootstrapServers=${KAFKA_URL}
@@ -76,7 +76,7 @@ services:
     container_name: ${PROJECT_NAME}.orders
     build:
       context: .
-      dockerfile: Orders/Dockerfile
+      dockerfile: Services/Orders/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - Consumers__BootstrapServers=${KAFKA_URL}
@@ -92,7 +92,7 @@ services:
     container_name: ${PROJECT_NAME}.emails
     build:
       context: .
-      dockerfile: Emails/Dockerfile
+      dockerfile: Services/Emails/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - Consumers__BootstrapServers=${KAFKA_URL}
@@ -104,7 +104,7 @@ services:
     container_name: ${PROJECT_NAME}.logs
     build:
       context: .
-      dockerfile: LogsProcessor/Dockerfile
+      dockerfile: Services/LogsProcessor/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - Consumers__BootstrapServers=${KAFKA_URL}

@@ -6,17 +6,17 @@ ENV ASPNETCORE_URLS=http://+:80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ./LogsProcessor/LogsProcessor.csproj ./LogsProcessor/
+COPY ./Services/LogsProcessor/LogsProcessor.csproj ./Services/LogsProcessor/
 COPY ./Libs/Broker/Broker.csproj ./Libs/Broker/
 COPY ./Libs/Contracts/Contracts.csproj ./Libs/Contracts/
 
-RUN dotnet restore ./LogsProcessor/LogsProcessor.csproj
+RUN dotnet restore ./Services/LogsProcessor/LogsProcessor.csproj
 
-COPY ./LogsProcessor/ ./LogsProcessor/
+COPY ./Services/LogsProcessor/ ./Services/LogsProcessor/
 COPY ./Libs/Broker/ ./Libs/Broker/
 COPY ./Libs/Contracts/ ./Libs/Contracts/
 
-WORKDIR ./LogsProcessor
+WORKDIR ./Services/LogsProcessor
 RUN dotnet build LogsProcessor.csproj -c Release -o /app/build
 
 FROM build AS publish
