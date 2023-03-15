@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-deployment
+spec:
+  selector:
+    matchLabels:
+      app: payments-deployment
+  template:
+    metadata:
+      labels:
+        app: payments-deployment
+    spec:
+      containers:
+        - name: payments-deployment
+          image: kafka.estudos.payments:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: general-configs
+                  key: ASPNETCORE_ENVIRONMENT
+            - name: Consumers__BootstrapServers
+              valueFrom:
+                configMapKeyRef:
+                  name: general-configs
+                  key: KAFKA_URL
+            - name: Producers__BootstrapServers
+              valueFrom:
+                configMapKeyRef:
+                  name: general-configs
+                  key: KAFKA_URL

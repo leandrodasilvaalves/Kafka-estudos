@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-deployment
+spec:
+  selector:
+    matchLabels:
+      app: orders-deployment
+  template:
+    metadata:
+      labels:
+        app: orders-deployment
+    spec:
+      containers:
+        - name: orders-deployment
+          image: kafka.estudos.orders:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: general-configs
+                  key: ASPNETCORE_ENVIRONMENT
+            - name: Consumers__BootstrapServers
+              valueFrom:
+                configMapKeyRef:
+                  name: general-configs
+                  key: KAFKA_URL
+            - name: Consumers__SecurityProtocol
+              valueFrom:
+                configMapKeyRef:
+                  name: general-configs
+                  key: KAFKA_SECURITY_PROTOCOL
+            - name: Kafka__BootstrapServers
+              valueFrom:
+                configMapKeyRef:
+                  name: general-configs
+                  key: KAFKA_URL

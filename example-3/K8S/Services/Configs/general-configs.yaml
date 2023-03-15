@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: general-configs
+data:
+  ASPNETCORE_ENVIRONMENT: "Development"
+  KAFKA_URL: "kafka-service:29092"
+  KAFKA_SECURITY_PROTOCOL: "PLAINTEXT"
