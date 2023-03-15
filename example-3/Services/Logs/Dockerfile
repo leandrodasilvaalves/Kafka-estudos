@@ -6,23 +6,23 @@ ENV ASPNETCORE_URLS=http://+:80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ./Services/LogsProcessor/LogsProcessor.csproj ./Services/LogsProcessor/
+COPY ./Services/Logs/Logs.csproj ./Services/Logs/
 COPY ./Libs/Broker/Broker.csproj ./Libs/Broker/
 COPY ./Libs/Contracts/Contracts.csproj ./Libs/Contracts/
 
-RUN dotnet restore ./Services/LogsProcessor/LogsProcessor.csproj
+RUN dotnet restore ./Services/Logs/Logs.csproj
 
-COPY ./Services/LogsProcessor/ ./Services/LogsProcessor/
+COPY ./Services/Logs/ ./Services/Logs/
 COPY ./Libs/Broker/ ./Libs/Broker/
 COPY ./Libs/Contracts/ ./Libs/Contracts/
 
-WORKDIR ./Services/LogsProcessor
-RUN dotnet build LogsProcessor.csproj -c Release -o /app/build
+WORKDIR ./Services/Logs
+RUN dotnet build Logs.csproj -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish LogsProcessor.csproj -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish Logs.csproj -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "LogsProcessor.dll"]
+ENTRYPOINT ["dotnet", "Logs.dll"]

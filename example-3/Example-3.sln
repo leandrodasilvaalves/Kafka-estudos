@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{48
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emails", "Services\Emails\Emails.csproj", "{3380EC3F-1087-4F00-A1B3-E67B0A6BB99B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogsProcessor", "Services\LogsProcessor\LogsProcessor.csproj", "{DE8B2467-25DD-462C-836A-3C3C492CAC9F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logs", "Services\Logs\Logs.csproj", "{DE8B2467-25DD-462C-836A-3C3C492CAC9F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orders", "Services\Orders\Orders.csproj", "{8A65C558-B1F7-45F7-B076-A7DD89620A35}"
 EndProject

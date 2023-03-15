@@ -1,7 +1,7 @@
 ﻿
 using Broker.Consumers;
 using Contracts.Models;
-using LogsProcessor.Consumers;
+using Logs.Consumers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json");

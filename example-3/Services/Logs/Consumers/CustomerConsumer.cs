@@ -2,7 +2,7 @@ using Broker.Consumers;
 using Contracts.Extensions;
 using Contracts.Models;
 
-namespace LogsProcessor.Consumers
+namespace Logs.Consumers
 {
     public class CustomerConsumer : Consumer<Customer>
     {
