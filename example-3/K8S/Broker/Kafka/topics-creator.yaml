@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-kafka
+  labels:
+    name: init-kafka
+spec:
+  restartPolicy: Never
+  containers:
+  - name: init-kafka
+    image: confluentinc/cp-kafka:7.3.0
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    env:
+      - name: "KAFKA_CONNECTION"
+        value: "kafka-service:29092"
+      - name: "PARTITIONS_NUMBER"
+        value: "3"
+    command: 
+      - sh
+      - "-c"
+      - |
+        /bin/bash <<'EOF'
+
+        kafka-topics --bootstrap-server $KAFKA_CONNECTION --create --if-not-exists --topic payments --replication-factor 1 --partitions $PARTITIONS_NUMBER
+        kafka-topics --bootstrap-server $KAFKA_CONNECTION --create --if-not-exists --topic orders --replication-factor 1 --partitions $PARTITIONS_NUMBER
+        kafka-topics --bootstrap-server $KAFKA_CONNECTION --create --if-not-exists --topic customers --replication-factor 1 --partitions $PARTITIONS_NUMBER
+        kafka-topics --bootstrap-server $KAFKA_CONNECTION --create --if-not-exists --topic products --replication-factor 1 --partitions $PARTITIONS_NUMBER
+        echo all topics were created
+
+        EOF
+
