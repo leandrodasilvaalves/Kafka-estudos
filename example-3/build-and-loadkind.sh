@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# docker-compose build
+docker-compose build
 
 cluste_name=meu-cluster
 kind_node=$cluste_name-control-plane
