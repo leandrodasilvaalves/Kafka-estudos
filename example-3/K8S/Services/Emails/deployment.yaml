@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: emails-deployment
-        image: kafka.estudos.emails:latest
+        image: leandroalves86/kafka.estudos.emails:latest
         resources:
           limits:
             memory: "128Mi"

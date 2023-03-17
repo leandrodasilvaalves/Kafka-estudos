@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: logs-deployment
-          image: kafka.estudos.logs:latest
+          image: leandroalves86/kafka.estudos.logs:latest
           resources:
             limits:
               memory: "128Mi"

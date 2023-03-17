@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: payments-deployment
-          image: kafka.estudos.payments:latest
+          image: leandroalves86/kafka.estudos.payments:latest
           resources:
             limits:
               memory: "128Mi"

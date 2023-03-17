@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: orders-deployment
-          image: kafka.estudos.orders:latest
+          image: leandroalves86/kafka.estudos.orders:latest
           resources:
             limits:
               memory: "128Mi"
